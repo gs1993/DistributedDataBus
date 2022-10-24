@@ -1,0 +1,22 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service OrderProtoService {
+rpc Get (GetOrderRequest) returns (OrderDetails);
+rpc GetCount (google.protobuf.Empty) returns (OrderCountResult);
+}
+
+message GetOrderRequest {
+int32 orderId = 1;
+}
+
+message OrderDetails {
+int32 id = 1;
+string name = 2;
+string status = 3;
+}
+
+message OrderCountResult {
+int32 count = 1;
+}
