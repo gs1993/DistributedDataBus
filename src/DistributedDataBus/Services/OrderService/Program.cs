@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using OrderService.Repositories;
+using System;
+
 namespace OrderService
 {
     public class Program
@@ -5,6 +9,9 @@ namespace OrderService
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<OrderDbContext>(opt => opt.UseInMemoryDatabase("OrderDb"));
+            builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
             builder.Services.AddGrpc();
 

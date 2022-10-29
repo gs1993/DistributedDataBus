@@ -1,21 +1,39 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using OrderService.Repositories;
 using static OrderProtoService;
 
 namespace OrderService.Services
 {
     public class OrderService : OrderProtoServiceBase
     {
+        private readonly IOrderRepository _orderRepository;
 
-
-        public override Task<OrderDetails> Get(GetOrderRequest request, ServerCallContext context)
+        public OrderService(IOrderRepository orderRepository)
         {
-            throw new Exception();
+            _orderRepository = orderRepository;
         }
 
-        public override Task<OrderCountResult> GetCount(Empty request, ServerCallContext context)
+        public override async Task<OrderDetails> Get(GetOrderRequest request, ServerCallContext context)
         {
-            throw new Exception();
+            var order = await _orderRepository.Get(request.OrderId, context.CancellationToken);
+
+            return order != null
+               ? new OrderDetails
+               {
+                   Id = order.Id,
+                   Name = order.Name,
+                   Status = order.Status
+               } : null;
+        }
+
+        public override async Task<OrderCountResult> GetCount(Empty request, ServerCallContext context)
+        {
+            int count = await _orderRepository.Count(context.CancellationToken);
+            return new OrderCountResult
+            {
+                Count = count
+            };
         }
     }
 }

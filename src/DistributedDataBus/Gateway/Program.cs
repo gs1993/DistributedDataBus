@@ -17,14 +17,14 @@ public class Program
 
         builder.Services.AddGrpcClient<OrderProtoService.OrderProtoServiceClient>(o =>
         {
-            o.Address = new Uri("https://localhost:7033"); //TODO: get address from config
+            o.Address = new Uri("https://localhost:5001"); //TODO: get address from config
         });
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI();       
         }
 
         app.UseHttpsRedirection();
