@@ -1,3 +1,5 @@
+using DataBus;
+using DataBus.Requests;
 using Gateway.Utils;
 
 namespace Gateway;
@@ -19,6 +21,8 @@ public class Program
         {
             o.Address = new Uri("https://localhost:5001"); //TODO: get address from config
         });
+
+        builder.Services.RegisterProducer<CreateOrderRequest>();
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())

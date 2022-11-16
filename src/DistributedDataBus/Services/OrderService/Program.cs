@@ -1,6 +1,8 @@
+using DataBus;
+using DataBus.Requests;
 using Microsoft.EntityFrameworkCore;
+using OrderService.Consumers;
 using OrderService.Repositories;
-using System;
 
 namespace OrderService
 {
@@ -14,6 +16,8 @@ namespace OrderService
             builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
             builder.Services.AddGrpc();
+
+            builder.Services.RegisterConsumer<CreateOrderRequest, CreateOrderConsumer>();
 
             var app = builder.Build();
 

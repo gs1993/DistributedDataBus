@@ -14,7 +14,7 @@ namespace OrderService.Services
             _orderRepository = orderRepository;
         }
 
-        public override async Task<OrderDetails> Get(GetOrderRequest request, ServerCallContext context)
+        public override async Task<OrderDetails?> Get(GetOrderRequest request, ServerCallContext context)
         {
             var order = await _orderRepository.Get(request.OrderId, context.CancellationToken);
 

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\DataBus\DataBus.csproj" />
   </ItemGroup>
 
 </Project>
