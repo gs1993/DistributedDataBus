@@ -1,5 +1,4 @@
-﻿using DataBus.Requests;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
@@ -7,16 +6,16 @@ namespace DataBus
 {
     public static class Extensions
     {
-        public static void RegisterProducer<TMessage>(this IServiceCollection services) where TMessage : class
+        public static void RegisterProducer<TMessage>(this IServiceCollection services, RabbitMqSettings settings) where TMessage : class
         {
             services.AddMassTransit(mt =>
             {
                 mt.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h => //TODO: from config
+                    cfg.Host(settings.Host, settings.VirtualHost, h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username(settings.UserName);
+                        h.Password(settings.Password);
                     });
 
                     string tMessageName = typeof(TMessage).Name;
@@ -30,7 +29,7 @@ namespace DataBus
             });
         }
 
-        public static void RegisterConsumer<TMessage, TConsumer>(this IServiceCollection services)
+        public static void RegisterConsumer<TMessage, TConsumer>(this IServiceCollection services, RabbitMqSettings settings)
             where TMessage : class
             where TConsumer : class, IConsumer<TMessage>
         {
@@ -40,10 +39,10 @@ namespace DataBus
 
                 mt.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h => //TODO: from config
+                    cfg.Host(settings.Host, settings.VirtualHost, h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username(settings.UserName);
+                        h.Password(settings.Password);
                     });
 
                     string tMessageName = typeof(TMessage).Name;

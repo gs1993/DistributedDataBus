@@ -17,7 +17,9 @@ namespace OrderService
 
             builder.Services.AddGrpc();
 
-            builder.Services.RegisterConsumer<CreateOrderRequest, CreateOrderConsumer>();
+            RabbitMqSettings rabbitMqSettings = new();
+            builder.Configuration.GetSection("RabbitMqSettings").Bind(rabbitMqSettings);
+            builder.Services.RegisterConsumer<CreateOrderRequest, CreateOrderConsumer>(rabbitMqSettings);
 
             var app = builder.Build();
 
