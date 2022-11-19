@@ -58,15 +58,29 @@ namespace Gateway.Controllers
         [SwaggerResponse((int)HttpStatusCode.Accepted)]
         [SwaggerResponse((int)HttpStatusCode.BadRequest)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> Post([FromBody] CreateOrderDto request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] CreateOrderDto request, CancellationToken cancellationToken)
         {
             if (request is null || string.IsNullOrWhiteSpace(request.Name))
                 return BadRequest();
 
-            await _publishEndpoint.Publish(new CreateOrderRequest
-            {
-                Name = request.Name
-            }, cancellationToken).ConfigureAwait(false);
+            await _publishEndpoint.Publish(new CreateOrderRequest(request.Name), cancellationToken)
+                .ConfigureAwait(false);
+
+            return Accepted();
+        }
+
+        [HttpPost]
+        [Route("Cancel/{id}")]
+        [SwaggerResponse((int)HttpStatusCode.Accepted)]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest)]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Cancel([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            if (id < 1)
+                return ValidationIdError();
+
+            await _publishEndpoint.Publish(new CancelOrderRequest(id), cancellationToken)
+                .ConfigureAwait(false);
 
             return Accepted();
         }

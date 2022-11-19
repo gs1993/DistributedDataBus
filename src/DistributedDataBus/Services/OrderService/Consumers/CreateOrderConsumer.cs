@@ -1,15 +1,21 @@
 ﻿using DataBus.Requests;
 using MassTransit;
+using OrderService.Repositories;
 
 namespace OrderService.Consumers
 {
     public class CreateOrderConsumer : IConsumer<CreateOrderRequest>
     {
-        public Task Consume(ConsumeContext<CreateOrderRequest> context)
+        private readonly IOrderRepository _orderRepository;
+
+        public CreateOrderConsumer(IOrderRepository orderRepository)
         {
+            _orderRepository = orderRepository;
+        }
 
-
-            return Task.CompletedTask;
+        public async Task Consume(ConsumeContext<CreateOrderRequest> context)
+        {
+            await _orderRepository.Add(context.Message.Name);
         }
     }
 }

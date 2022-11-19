@@ -6,10 +6,10 @@ namespace OrderService.Repositories
 {
     public interface IOrderRepository
     {
-        Task<Order?> Get(int id, CancellationToken ct);
-        Task<int> Count(CancellationToken ct);
-        Task Add(string name, CancellationToken ct);
-        Task ChangeStatus(int id, string newStatus, CancellationToken ct);
+        Task<Order?> Get(int id, CancellationToken ct = default);
+        Task<int> Count(CancellationToken ct = default);
+        Task Add(string name, CancellationToken ct = default);
+        Task ChangeStatus(int id, string newStatus, CancellationToken ct = default);
     }
 
     public class OrderRepository : IOrderRepository

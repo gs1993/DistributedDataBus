@@ -1,7 +1,15 @@
 ﻿namespace DataBus.Requests
 {
-    public record CreateOrderRequest
+    public interface IRequest 
     {
-        public string Name { get; init; } //TODO: try add constuctor
+    }
+    public record CreateOrderRequest : IRequest
+    {
+        public string Name { get; init; }
+
+        public CreateOrderRequest(string name)
+        {
+            Name = name;
+        }
     }
 }

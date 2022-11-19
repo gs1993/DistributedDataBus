@@ -1,6 +1,7 @@
 using DataBus;
 using DataBus.Requests;
 using Gateway.Utils;
+using MassTransit;
 
 namespace Gateway;
 
@@ -26,7 +27,21 @@ public class Program
         builder.Configuration.GetSection("RabbitMqSettings").Bind(rabbitMqSettings);
 
         builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("AppSettings"));
-        builder.Services.RegisterProducer<CreateOrderRequest>(rabbitMqSettings);
+
+        builder.Services.AddMassTransit(mt =>
+        {
+            mt.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost, h =>
+                {
+                    h.Username(rabbitMqSettings.UserName);
+                    h.Password(rabbitMqSettings.Password);
+                });
+
+                cfg.RegisterProducer<CreateOrderRequest>();
+                cfg.RegisterProducer<CancelOrderRequest>();
+            });
+        });
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
