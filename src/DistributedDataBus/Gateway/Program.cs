@@ -1,4 +1,7 @@
+using DataBus;
+using DataBus.Requests;
 using Gateway.Utils;
+using MassTransit;
 
 namespace Gateway;
 
@@ -20,11 +23,31 @@ public class Program
             o.Address = new Uri("https://localhost:5001"); //TODO: get address from config
         });
 
+        RabbitMqSettings rabbitMqSettings = new();
+        builder.Configuration.GetSection("RabbitMqSettings").Bind(rabbitMqSettings);
+
+        builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("AppSettings"));
+
+        builder.Services.AddMassTransit(mt =>
+        {
+            mt.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost, h =>
+                {
+                    h.Username(rabbitMqSettings.UserName);
+                    h.Password(rabbitMqSettings.Password);
+                });
+
+                cfg.RegisterProducer<CreateOrderRequest>();
+                cfg.RegisterProducer<CancelOrderRequest>();
+            });
+        });
+
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();       
+            app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();

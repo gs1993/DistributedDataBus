@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.csproj", "{C689899A-716F-40EC-AD63-B4116C70E733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "Gateway\Gateway.csproj", "{C689899A-716F-40EC-AD63-B4116C70E733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{B77BBB56-B708-49B0-BD4F-6B4D918B99E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{B77BBB56-B708-49B0-BD4F-6B4D918B99E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{9B1CEB43-F0E9-4195-9905-56A627B6D743}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "Services\OrderService\OrderService.csproj", "{A5E510FC-5B7B-4990-9C35-28C92890855D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "Services\OrderService\OrderService.csproj", "{A5E510FC-5B7B-4990-9C35-28C92890855D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBus", "DataBus\DataBus.csproj", "{AB603246-CAD1-4658-AFBE-2475F794F2AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{A5E510FC-5B7B-4990-9C35-28C92890855D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5E510FC-5B7B-4990-9C35-28C92890855D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5E510FC-5B7B-4990-9C35-28C92890855D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB603246-CAD1-4658-AFBE-2475F794F2AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB603246-CAD1-4658-AFBE-2475F794F2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB603246-CAD1-4658-AFBE-2475F794F2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB603246-CAD1-4658-AFBE-2475F794F2AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
