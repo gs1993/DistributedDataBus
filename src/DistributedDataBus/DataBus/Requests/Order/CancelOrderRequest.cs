@@ -1,4 +1,4 @@
-﻿namespace DataBus.Requests
+﻿namespace DataBus.Requests.Order
 {
     public record CancelOrderRequest : IRequest
     {

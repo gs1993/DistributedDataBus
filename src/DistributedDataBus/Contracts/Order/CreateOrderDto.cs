@@ -1,4 +1,4 @@
-﻿namespace Contracts.Orders.Models
+﻿namespace Contracts.Order.Models
 {
     public record CreateOrderDto
     {

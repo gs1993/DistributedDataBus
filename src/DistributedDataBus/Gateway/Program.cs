@@ -1,5 +1,6 @@
 using DataBus;
-using DataBus.Requests;
+using DataBus.Requests.Book;
+using DataBus.Requests.Order;
 using Gateway.Utils;
 using MassTransit;
 
@@ -22,6 +23,10 @@ public class Program
         {
             o.Address = new Uri("https://localhost:5001"); //TODO: get address from config
         });
+        builder.Services.AddGrpcClient<BookProtoService.BookProtoServiceClient>(o =>
+        {
+            o.Address = new Uri("https://localhost:5002"); //TODO: get address from config
+        });
 
         RabbitMqSettings rabbitMqSettings = new();
         builder.Configuration.GetSection("RabbitMqSettings").Bind(rabbitMqSettings);
@@ -40,6 +45,7 @@ public class Program
 
                 cfg.RegisterProducer<CreateOrderRequest>();
                 cfg.RegisterProducer<CancelOrderRequest>();
+                cfg.RegisterProducer<ImportBookRequest>();
             });
         });
 
