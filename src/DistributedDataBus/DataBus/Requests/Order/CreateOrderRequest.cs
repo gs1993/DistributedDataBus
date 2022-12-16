@@ -1,6 +1,6 @@
-﻿namespace DataBus.Requests
+﻿namespace DataBus.Requests.Order
 {
-    public interface IRequest 
+    public interface IRequest
     {
     }
     public record CreateOrderRequest : IRequest

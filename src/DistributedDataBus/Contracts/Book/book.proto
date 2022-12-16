@@ -1,0 +1,29 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service BookProtoService {
+rpc Get (GetBookRequest) returns (BookDetails);
+rpc GetCount (google.protobuf.Empty) returns (BookCountResult);
+}
+
+message GetBookRequest {
+string isbn = 1;
+}
+
+message BookDetails {
+string isbn = 1;
+string title = 2;
+string publishDate = 3;
+int32 pageCount = 4;
+repeated AuthorDetailsDto authors = 5;
+}
+
+message AuthorDetailsDto {
+string fullName = 1;
+string bio = 2;
+}
+
+message BookCountResult {
+int32 count = 1;
+}

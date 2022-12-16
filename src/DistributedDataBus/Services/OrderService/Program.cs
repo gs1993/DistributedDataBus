@@ -1,10 +1,9 @@
 using DataBus;
-using DataBus.Requests;
+using DataBus.Requests.Order;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Consumers;
 using OrderService.Repositories;
-using RabbitMQ.Client;
 
 namespace OrderService
 {

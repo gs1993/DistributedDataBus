@@ -1,4 +1,4 @@
-﻿using DataBus.Requests;
+﻿using DataBus.Requests.Order;
 using MassTransit;
 using OrderService.Repositories;
 

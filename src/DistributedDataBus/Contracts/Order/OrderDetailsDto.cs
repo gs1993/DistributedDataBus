@@ -1,6 +1,6 @@
 ﻿using Dawn;
 
-namespace Contracts.Orders.Models
+namespace Contracts.Order.Models
 {
     public record OrderDetailsDto
     {
