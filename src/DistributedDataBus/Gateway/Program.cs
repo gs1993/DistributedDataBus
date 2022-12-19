@@ -1,3 +1,4 @@
+using Contracts.Utils;
 using DataBus;
 using DataBus.Requests.Book;
 using DataBus.Requests.Order;
@@ -11,43 +12,22 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var services = builder.Services;
+        var configuration = builder.Configuration;
 
-        builder.Services.AddAuthorization();
+        services.AddAuthorization();
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+        services.AddControllers();
 
-        builder.Services.AddControllers();
+        services.AddOptions();
 
-        builder.Services.AddGrpcClient<OrderProtoService.OrderProtoServiceClient>(o =>
-        {
-            o.Address = new Uri("https://localhost:5001"); //TODO: get address from config
-        });
-        builder.Services.AddGrpcClient<BookProtoService.BookProtoServiceClient>(o =>
-        {
-            o.Address = new Uri("https://localhost:5002"); //TODO: get address from config
-        });
+        var grpcSettings = configuration.GetConfigSection<GrpcSettings>();
+        RegisterGrpcClients(services, grpcSettings);
 
-        RabbitMqSettings rabbitMqSettings = new();
-        builder.Configuration.GetSection("RabbitMqSettings").Bind(rabbitMqSettings);
-
-        builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("AppSettings"));
-
-        builder.Services.AddMassTransit(mt =>
-        {
-            mt.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost, h =>
-                {
-                    h.Username(rabbitMqSettings.UserName);
-                    h.Password(rabbitMqSettings.Password);
-                });
-
-                cfg.RegisterProducer<CreateOrderRequest>();
-                cfg.RegisterProducer<CancelOrderRequest>();
-                cfg.RegisterProducer<ImportBookRequest>();
-            });
-        });
+        var rabbitMqSettings = configuration.GetConfigSection<RabbitMqSettings>();
+        RegisterRabbitMq(services, rabbitMqSettings);
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
@@ -67,5 +47,36 @@ public class Program
         });
 
         app.Run();
+    }
+
+    private static void RegisterGrpcClients(IServiceCollection services, GrpcSettings grpcSettings)
+    {
+        services.AddGrpcClient<OrderProtoService.OrderProtoServiceClient>(o =>
+        {
+            o.Address = new Uri(grpcSettings.GetUrl("OrderService"));
+        });
+        services.AddGrpcClient<BookProtoService.BookProtoServiceClient>(o =>
+        {
+            o.Address = new Uri(grpcSettings.GetUrl("BookService"));
+        });
+    }
+
+    private static void RegisterRabbitMq(IServiceCollection services, RabbitMqSettings rabbitMqSettings)
+    {
+        services.AddMassTransit(mt =>
+        {
+            mt.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost, h =>
+                {
+                    h.Username(rabbitMqSettings.UserName);
+                    h.Password(rabbitMqSettings.Password);
+                });
+
+                cfg.RegisterProducer<CreateOrderRequest>();
+                cfg.RegisterProducer<CancelOrderRequest>();
+                cfg.RegisterProducer<ImportBookRequest>();
+            });
+        });
     }
 }
