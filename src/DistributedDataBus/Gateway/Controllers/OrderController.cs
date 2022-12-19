@@ -23,6 +23,7 @@ namespace Gateway.Controllers
         [Route("{id}")]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(OrderDetailsDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest)]
+        [SwaggerResponse((int)HttpStatusCode.TooManyRequests)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
         {
@@ -42,6 +43,7 @@ namespace Gateway.Controllers
         [Route("count")]
         [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(int))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest)]
+        [SwaggerResponse((int)HttpStatusCode.TooManyRequests)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Count(CancellationToken cancellationToken)
         {

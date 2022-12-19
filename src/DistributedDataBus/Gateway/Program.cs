@@ -1,9 +1,12 @@
+using AspNetCoreRateLimit;
 using Contracts.Utils;
 using DataBus;
 using DataBus.Requests.Book;
 using DataBus.Requests.Order;
 using Gateway.Utils;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 
 namespace Gateway;
 
@@ -29,6 +32,8 @@ public class Program
         var rabbitMqSettings = configuration.GetConfigSection<RabbitMqSettings>();
         RegisterRabbitMq(services, rabbitMqSettings);
 
+        RegisterRateLimiter(services, configuration);
+
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
         {
@@ -39,6 +44,8 @@ public class Program
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthorization();
+
+        app.UseIpRateLimiting();
 
         app.UseMiddleware<ErrorHandlerMiddleware>();
         app.UseEndpoints(endpoints =>
@@ -78,5 +85,21 @@ public class Program
                 cfg.RegisterProducer<ImportBookRequest>();
             });
         });
+    }
+
+    private static void RegisterRateLimiter(IServiceCollection services, ConfigurationManager configuration)
+    {
+        var redisSettings = configuration.GetConfigSection<RedisSettings>();
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisSettings.ConnectionString;
+
+        });
+        services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimitOptions"));
+        services.AddDistributedRateLimiting();
+        services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+        services.AddSingleton<IIpPolicyStore, DistributedCacheIpPolicyStore>();
+        services.AddSingleton<IRateLimitCounterStore, DistributedCacheRateLimitCounterStore>();
+        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
     }
 }
