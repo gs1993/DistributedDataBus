@@ -2,7 +2,7 @@
 
 ## Architecture
 <p align="center">
-![Architecture](https://github.com/gs1993/DistributedDataBus/blob/main/docs/Architecture.jpg)
+  <img src="https://github.com/gs1993/DistributedDataBus/blob/main/docs/Architecture.jpg">
 </p>
 
 ## Features
@@ -17,7 +17,7 @@ Used for synchronous communication between API Gateway and microservices, due to
 ### API Gateway
 Stateless API Gateway to the system act as single entry point for the clients
 <p align="center">
-![ApiGateway](https://github.com/gs1993/DistributedDataBus/blob/main/docs/ApiGateway.jpg)
+  <img src="https://github.com/gs1993/DistributedDataBus/blob/main/docs/ApiGateway.jpg">
 </p>
 
 Benefits:
