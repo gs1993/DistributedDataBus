@@ -1,7 +1,7 @@
 # Distributed Data Bus
 
 ## Architecture
-![Architecture](https://github.com/gs1993/DistributedDataBus/blob/master/docs/Architecture.jpg)
+![Architecture](https://github.com/gs1993/DistributedDataBus/blob/main/docs/Architecture.jpg)
 
 ## Features
 
@@ -14,7 +14,7 @@ Used for synchronous communication between API Gateway and microservices, due to
 
 ### API Gateway
 Stateless API Gateway to the system act as single entry point for the clients
-![ApiGateway](https://github.com/gs1993/DistributedDataBus/blob/master/docs/ApiGateway.jpg)
+![ApiGateway](https://github.com/gs1993/DistributedDataBus/blob/main/docs/ApiGateway.jpg)
 
 Benefits:
 1. Horizontal scalability
